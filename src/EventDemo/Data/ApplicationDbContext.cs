@@ -15,6 +15,9 @@ namespace EventDemo.Data
         {
         }
 
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Timetable> Timetables { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
