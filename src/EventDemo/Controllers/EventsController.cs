@@ -34,19 +34,19 @@ namespace EventDemo.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            var model = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(@event);
+            return View(model);
         }
 
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "Description");
+            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "TimetableId");
             return View();
         }
 

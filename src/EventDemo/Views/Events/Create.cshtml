@@ -4,6 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
+<link rel="stylesheet" href="~/lib/datetimepicker/jquery.datetimepicker.css" />
+
 <h2>Create</h2>
 
 <form asp-action="Create">
@@ -24,7 +26,7 @@
             <label asp-for="StartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger" />
+                <span asp-validation-for="StartDate" class="text-danger" ></span>
             </div>
         </div>
 
@@ -57,12 +59,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-
+    <script src="~/lib/datetimepicker/build/jquery.datetimepicker.full.js"></script>
 <script>
-    (function() {
-        $("#StartDate").datepicker();
-        $("#EndTime").datepicker();
-    })();
+    $(function () {
+        $("#StartDate").datetimepicker();
+        $("#EndTime").datetimepicker();
+    });
 </script>
+  
+}
