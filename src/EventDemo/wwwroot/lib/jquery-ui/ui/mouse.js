@@ -79,7 +79,7 @@ return $.widget("ui.mouse", {
 
 		var that = this,
 			btnIsLeft = (event.which === 1),
-			// event.target.nodeName works around a bug in IE 8 with
+			// model.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
@@ -101,7 +101,7 @@ return $.widget("ui.mouse", {
 			}
 		}
 
-		// Click event may never have fired (Gecko & Opera)
+		// Click model may never have fired (Gecko & Opera)
 		if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
 			$.removeData(event.target, this.widgetName + ".preventClickEvent");
 		}
@@ -127,7 +127,7 @@ return $.widget("ui.mouse", {
 	_mouseMove: function(event) {
 		// Only check for mouseups outside the document if you've moved inside the document
 		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
-		// fire a mousemove event if content is placed under the cursor. See #7778
+		// fire a mousemove model if content is placed under the cursor. See #7778
 		// Support: IE <9
 		if ( this._mouseMoved ) {
 			// IE mouseup check - mouseup happened when mouse was out of window
@@ -185,15 +185,15 @@ return $.widget("ui.mouse", {
 		);
 	},
 
-	_mouseDelayMet: function(/* event */) {
+	_mouseDelayMet: function(/* model */) {
 		return this.mouseDelayMet;
 	},
 
 	// These are placeholder methods, to be overriden by extending plugin
-	_mouseStart: function(/* event */) {},
-	_mouseDrag: function(/* event */) {},
-	_mouseStop: function(/* event */) {},
-	_mouseCapture: function(/* event */) { return true; }
+	_mouseStart: function(/* model */) {},
+	_mouseDrag: function(/* model */) {},
+	_mouseStop: function(/* model */) {},
+	_mouseCapture: function(/* model */) { return true; }
 });
 
 }));

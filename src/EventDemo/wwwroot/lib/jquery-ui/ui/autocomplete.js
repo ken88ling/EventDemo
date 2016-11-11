@@ -57,10 +57,10 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		// Some browsers only repeat keydown events, not keypress events,
 		// so we use the suppressKeyPress flag to determine if we've already
-		// handled the keydown event. #7269
+		// handled the keydown model. #7269
 		// Unfortunately the code for & in keypress is the same as the up arrow,
 		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
-		// events when we know the keydown event was used to modify the
+		// events when we know the keydown model was used to modify the
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput,
 			nodeName = this.element[ 0 ].nodeName.toLowerCase(),
@@ -216,8 +216,8 @@ $.widget( "ui.autocomplete", {
 				// prevent moving focus out of the text field
 				event.preventDefault();
 
-				// IE doesn't prevent moving focus even with event.preventDefault()
-				// so we set a flag to know when we should ignore the blur event
+				// IE doesn't prevent moving focus even with model.preventDefault()
+				// so we set a flag to know when we should ignore the blur model
 				this.cancelBlur = true;
 				this._delay(function() {
 					delete this.cancelBlur;
@@ -260,7 +260,7 @@ $.widget( "ui.autocomplete", {
 
 				item = ui.item.data( "ui-autocomplete-item" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
-					// use value to match what will end up in the input, if it was a key event
+					// use value to match what will end up in the input, if it was a key model
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
 						this._value( item.value );
 					}
@@ -293,7 +293,7 @@ $.widget( "ui.autocomplete", {
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
 					this._value( item.value );
 				}
-				// reset the term after the select event
+				// reset the term after the select model
 				// this allows custom select handling to work properly
 				this.term = this._value();
 

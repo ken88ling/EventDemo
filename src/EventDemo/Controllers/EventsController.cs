@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventDemo.Data;
 using EventDemo.Models;
+using EventDemo.Models.EventViewModels;
 
 namespace EventDemo.Controllers
 {
@@ -46,25 +47,35 @@ namespace EventDemo.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "TimetableId");
-            return View();
+            var model = new EventGeneralViewModel();
+           model.TimetablesList = new SelectList(_context.Timetables, "TimetableId", "Description");
+            return View(model);
         }
+
 
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EndTime,StartDate,TimetableId,Title")] Event @event)
+        public async Task<IActionResult> Create(EventGeneralViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@event);
+                var item =  new Event()
+                {
+                    Id=model.Id,
+                    Title = model.Title,
+                    TimetableId = model.TimetableId,
+                    StartDate = model.StartDate,
+                    EndTime = model.EndTime,
+                };
+                _context.Events.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "TimetableId", @event.TimetableId);
-            return View(@event);
+            model.TimetablesList = new SelectList(_context.Timetables, "TimetableId", "Description", model.TimetableId);
+            return View(model);
         }
 
         // GET: Events/Edit/5
@@ -75,13 +86,24 @@ namespace EventDemo.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            var getEvent =await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
+            if (getEvent == null)
             {
                 return NotFound();
             }
-            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "TimetableId", @event.TimetableId);
-            return View(@event);
+
+
+            var model = new EventGeneralViewModel()
+            {
+                Id = getEvent.Id,
+                Title = getEvent.Title,
+                StartDate = getEvent.StartDate,
+                EndTime = getEvent.EndTime,
+                TimetableId = getEvent.TimetableId
+            };
+            model.TimetablesList = new SelectList(_context.Timetables, "TimetableId", "Description",getEvent.TimetableId);
+
+            return View(model);
         }
 
         // POST: Events/Edit/5
@@ -89,9 +111,9 @@ namespace EventDemo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EndTime,StartDate,TimetableId,Title")] Event @event)
+        public async Task<IActionResult> Edit(EventGeneralViewModel model)
         {
-            if (id != @event.Id)
+            if (model == null)
             {
                 return NotFound();
             }
@@ -100,12 +122,20 @@ namespace EventDemo.Controllers
             {
                 try
                 {
-                    _context.Update(@event);
+                    var item = new Event()
+                    {
+                        Id = model.Id,
+                        Title = model.Title,
+                        StartDate = model.StartDate,
+                        EndTime = model.EndTime,
+                        TimetableId = model.TimetableId
+                    };
+                    _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.Id))
+                    if (!EventExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -116,8 +146,9 @@ namespace EventDemo.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["TimetableId"] = new SelectList(_context.Timetables, "TimetableId", "TimetableId", @event.TimetableId);
-            return View(@event);
+            
+            model.TimetablesList = new SelectList(_context.Timetables, model.Timetable.Description, model.Timetable.Description, model.TimetableId);
+            return View(model);
         }
 
         // GET: Events/Delete/5

@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * jQuery Validation Plugin v1.14.0
  *
  * http://jqueryvalidation.org/
@@ -388,7 +388,7 @@ $.extend( $.validator, {
 					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
 					"[type='radio'], [type='checkbox']", delegate)
 				// Support: Chrome, oldIE
-				// "select" is provided as event.target when clicking a option
+				// "select" is provided as model.target when clicking a option
 				.on("click.validate", "select, option, [type='radio'], [type='checkbox']", delegate);
 
 			if ( this.settings.invalidHandler ) {
@@ -536,7 +536,7 @@ $.extend( $.validator, {
 					$( this.findLastActive() || this.errorList.length && this.errorList[ 0 ].element || [])
 					.filter( ":visible" )
 					.focus()
-					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
+					// manually trigger focusin model; without it, focusin handler isn't called, findLastActive won't have anything to find
 					.trigger( "focusin" );
 				} catch ( e ) {
 					// ignore IE throwing errors when focusing hidden elements
@@ -1289,8 +1289,8 @@ $.extend( $.validator, {
 
 		// http://jqueryvalidation.org/equalTo-method/
 		equalTo: function( value, element, param ) {
-			// bind to the blur event of the target in order to revalidate whenever the target field is updated
-			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
+			// bind to the blur model of the target in order to revalidate whenever the target field is updated
+			// TODO find a way to bind the model just once, avoiding the unbind-rebind overhead
 			var target = $( param );
 			if ( this.settings.onfocusout ) {
 				target.off( ".validate-equalTo" ).on( "blur.validate-equalTo", function() {

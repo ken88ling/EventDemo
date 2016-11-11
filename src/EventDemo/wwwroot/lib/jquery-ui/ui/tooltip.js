@@ -159,7 +159,7 @@ return $.widget( "ui.tooltip", {
 		var that = this,
 			target = $( event ? event.target : this.element )
 				// we need closest here due to mouseover bubbling,
-				// but always pointing at the same event target
+				// but always pointing at the same model target
 				.closest( this.options.items );
 
 		// No element to show a tooltip for or the tooltip is already open
@@ -219,10 +219,10 @@ return $.widget( "ui.tooltip", {
 					return;
 				}
 
-				// jQuery creates a special event for focusin when it doesn't
-				// exist natively. To improve performance, the native event
+				// jQuery creates a special model for focusin when it doesn't
+				// exist natively. To improve performance, the native model
 				// object is reused and the type is changed. Therefore, we can't
-				// rely on the type being correct after the event finished
+				// rely on the type being correct after the model finished
 				// bubbling, so we set it back to the previous value. (#8740)
 				if ( event ) {
 					event.type = eventType;
@@ -307,7 +307,7 @@ return $.widget( "ui.tooltip", {
 		this._show( tooltip, this.options.show );
 		// Handle tracking tooltips that are shown with a delay (#8644). As soon
 		// as the tooltip is visible, position the tooltip using the most recent
-		// event.
+		// model.
 		if ( this.options.show && this.options.show.delay ) {
 			delayedShow = this.delayedShow = setInterval(function() {
 				if ( tooltip.is( ":visible" ) ) {

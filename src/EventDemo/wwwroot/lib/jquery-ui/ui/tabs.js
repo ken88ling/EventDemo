@@ -289,7 +289,7 @@ return $.widget( "ui.tabs", {
 			}
 		}
 
-		if ( key === "event" ) {
+		if ( key === "model" ) {
 			this._setupEvents( value );
 		}
 

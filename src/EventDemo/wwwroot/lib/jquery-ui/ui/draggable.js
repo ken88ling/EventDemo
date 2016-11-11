@@ -138,7 +138,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_blurActiveElement: function( event ) {
 		var document = this.document[ 0 ];
 
-		// Only need to blur if the event occurred on the draggable itself, see #10527
+		// Only need to blur if the model occurred on the draggable itself, see #10527
 		if ( !this.handleElement.is( event.target ) ) {
 			return;
 		}
@@ -205,7 +205,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Set a containment if given in the options
 		this._setContainment();
 
-		//Trigger event + callbacks
+		//Trigger model + callbacks
 		if (this._trigger("start", event) === false) {
 			this._clear();
 			return false;
@@ -316,7 +316,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			$.ui.ddmanager.dragStop(this, event);
 		}
 
-		// Only need to focus if the event occurred on the draggable itself, see #10527
+		// Only need to focus if the model occurred on the draggable itself, see #10527
 		if ( this.handleElement.is( event.target ) ) {
 			// The interaction is over; whether or not the click resulted in a drag, focus the element
 			this.element.focus();
@@ -814,13 +814,13 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 						return ui.helper[ 0 ];
 					};
 
-					// Fire the start events of the sortable with our passed browser event,
+					// Fire the start events of the sortable with our passed browser model,
 					// and our own helper (so it doesn't create a new one)
 					event.target = sortable.currentItem[ 0 ];
 					sortable._mouseCapture( event, true );
 					sortable._mouseStart( event, true, true );
 
-					// Because the browser event is way off the new appended portlet,
+					// Because the browser model is way off the new appended portlet,
 					// modify necessary variables to reflect the changes
 					sortable.offset.click.top = draggable.offset.click.top;
 					sortable.offset.click.left = draggable.offset.click.left;

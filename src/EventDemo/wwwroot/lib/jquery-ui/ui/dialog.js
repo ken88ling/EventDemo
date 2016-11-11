@@ -274,7 +274,7 @@ return $.widget( "ui.dialog", {
 			that._trigger( "focus" );
 		});
 
-		// Track the dialog immediately upon openening in case a focus event
+		// Track the dialog immediately upon openening in case a focus model
 		// somehow occurs outside of the dialog before an element inside the
 		// dialog is focused (#10152)
 		this._makeFocusTarget();
@@ -321,7 +321,7 @@ return $.widget( "ui.dialog", {
 		event.preventDefault();
 		checkFocus.call( this );
 		// support: IE
-		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
+		// IE <= 8 doesn't prevent moving focus even with model.preventDefault()
 		// so we check again later
 		this._delay( checkFocus );
 	},
@@ -394,7 +394,7 @@ return $.widget( "ui.dialog", {
 			mousedown: function( event ) {
 				// Don't prevent click on close button (#8838)
 				// Focusing a dialog that is partially scrolled out of view
-				// causes the browser to scroll it into view, preventing the click event
+				// causes the browser to scroll it into view, preventing the click model
 				if ( !$( event.target ).closest( ".ui-dialog-titlebar-close" ) ) {
 					// Dialog isn't getting focus when dragging (#8063)
 					this.uiDialog.focus();
@@ -816,7 +816,7 @@ return $.widget( "ui.dialog", {
 		}
 
 		// We use a delay in case the overlay is created from an
-		// event that we're going to be cancelling (#2804)
+		// model that we're going to be cancelling (#2804)
 		var isOpening = true;
 		this._delay(function() {
 			isOpening = false;
@@ -825,7 +825,7 @@ return $.widget( "ui.dialog", {
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
 			// Prevent use of anchors and inputs
-			// Using _on() for an event handler shared across many instances is
+			// Using _on() for an model handler shared across many instances is
 			// safe because the dialogs stack and must be closed in reverse order
 			this._on( this.document, {
 				focusin: function( event ) {

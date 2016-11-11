@@ -1,4 +1,4 @@
-@model EventDemo.Models.Event
+@model EventDemo.Models.EventViewModels.EventGeneralViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -18,7 +18,7 @@
             <label asp-for="Title" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
+                <span asp-validation-for="Title" class="text-danger" ></span>
             </div>
         </div>
 
@@ -34,14 +34,14 @@
             <label asp-for="EndTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
         </div>
       
         <div class="form-group">
             <label asp-for="TimetableId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="TimetableId" class ="form-control" asp-items="ViewBag.TimetableId"></select>
+                <select asp-for="TimetableId" class ="form-control" asp-items="@Model.TimetablesList"></select>
             </div>
         </div>
       
@@ -60,11 +60,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/datetimepicker/build/jquery.datetimepicker.full.js"></script>
-<script>
-    $(function () {
-        $("#StartDate").datetimepicker();
-        $("#EndTime").datetimepicker();
-    });
-</script>
-  
+    <script>
+        $(function() {
+            $("#StartDate").val("");
+            
+            $("#StartDate").datetimepicker();
+            
+            $("#EndTime").val("");
+            $("#EndTime").datetimepicker($.now());
+        });
+    </script>
+
 }

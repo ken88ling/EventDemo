@@ -168,8 +168,8 @@ return $.widget( "ui.spinner", {
 			checkFocus.call( this );
 
 			// support: IE
-			// IE doesn't prevent moving focus even with event.preventDefault()
-			// so we set a flag to know when we should ignore the blur event
+			// IE doesn't prevent moving focus even with model.preventDefault()
+			// so we set a flag to know when we should ignore the blur model
 			// and check (again) if focus moved off of the input.
 			this.cancelBlur = true;
 			this._delay(function() {
@@ -197,7 +197,7 @@ return $.widget( "ui.spinner", {
 		},
 		// TODO: do we really want to consider this a stop?
 		// shouldn't we just stop the repeater and wait until mouseup before
-		// we trigger the stop event?
+		// we trigger the stop model?
 		"mouseleave .ui-spinner-button": "_stop"
 	},
 

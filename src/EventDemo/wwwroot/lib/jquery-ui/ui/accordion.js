@@ -149,7 +149,7 @@ return $.widget( "ui.accordion", {
 			return;
 		}
 
-		if ( key === "event" ) {
+		if ( key === "model" ) {
 			if ( this.options.event ) {
 				this._off( this.headers, this.options.event );
 			}

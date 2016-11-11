@@ -187,7 +187,7 @@ $.widget( "ui.button", {
 			if ( this.buttonElement.is("a") ) {
 				this.buttonElement.keyup(function(event) {
 					if ( event.keyCode === $.ui.keyCode.SPACE ) {
-						// TODO pass through original event correctly (just as 2nd argument doesn't work)
+						// TODO pass through original model correctly (just as 2nd argument doesn't work)
 						$( this ).click();
 					}
 				});

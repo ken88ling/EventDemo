@@ -294,7 +294,7 @@ $.Widget.prototype = {
 	destroy: function() {
 		this._destroy();
 		// we can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._on()
+		// all model bindings should go through this._on()
 		this.element
 			.unbind( this.eventNamespace )
 			.removeData( this.widgetFullName )
@@ -496,11 +496,11 @@ $.Widget.prototype = {
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
-		// the original event may come from any element
-		// so we need to reset the target on the new event
+		// the original model may come from any element
+		// so we need to reset the target on the new model
 		event.target = this.element[ 0 ];
 
-		// copy original event properties over to the new event
+		// copy original model properties over to the new model
 		orig = event.originalEvent;
 		if ( orig ) {
 			for ( prop in orig ) {

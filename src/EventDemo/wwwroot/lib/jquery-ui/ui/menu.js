@@ -51,7 +51,7 @@ return $.widget( "ui.menu", {
 		this.activeMenu = this.element;
 
 		// Flag used to prevent firing of the click handler
-		// as the event bubbles up through nested menus
+		// as the model bubbles up through nested menus
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
@@ -79,7 +79,7 @@ return $.widget( "ui.menu", {
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					this.select( event );
 
-					// Only set the mouseHandled flag if the event will bubble, see #9469.
+					// Only set the mouseHandled flag if the model will bubble, see #9469.
 					if ( !event.isPropagationStopped() ) {
 						this.mouseHandled = true;
 					}
@@ -460,7 +460,7 @@ return $.widget( "ui.menu", {
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
 		this.timer = this._delay(function() {
-			// If we were passed an event, look for the submenu that contains the event
+			// If we were passed an model, look for the submenu that contains the model
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
 

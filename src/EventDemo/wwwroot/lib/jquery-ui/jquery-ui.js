@@ -594,7 +594,7 @@ $.Widget.prototype = {
 	destroy: function() {
 		this._destroy();
 		// we can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._on()
+		// all model bindings should go through this._on()
 		this.element
 			.unbind( this.eventNamespace )
 			.removeData( this.widgetFullName )
@@ -796,11 +796,11 @@ $.Widget.prototype = {
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
-		// the original event may come from any element
-		// so we need to reset the target on the new event
+		// the original model may come from any element
+		// so we need to reset the target on the new model
 		event.target = this.element[ 0 ];
 
-		// copy original event properties over to the new event
+		// copy original model properties over to the new model
 		orig = event.originalEvent;
 		if ( orig ) {
 			for ( prop in orig ) {
@@ -924,7 +924,7 @@ var mouse = $.widget("ui.mouse", {
 
 		var that = this,
 			btnIsLeft = (event.which === 1),
-			// event.target.nodeName works around a bug in IE 8 with
+			// model.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
@@ -946,7 +946,7 @@ var mouse = $.widget("ui.mouse", {
 			}
 		}
 
-		// Click event may never have fired (Gecko & Opera)
+		// Click model may never have fired (Gecko & Opera)
 		if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
 			$.removeData(event.target, this.widgetName + ".preventClickEvent");
 		}
@@ -972,7 +972,7 @@ var mouse = $.widget("ui.mouse", {
 	_mouseMove: function(event) {
 		// Only check for mouseups outside the document if you've moved inside the document
 		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
-		// fire a mousemove event if content is placed under the cursor. See #7778
+		// fire a mousemove model if content is placed under the cursor. See #7778
 		// Support: IE <9
 		if ( this._mouseMoved ) {
 			// IE mouseup check - mouseup happened when mouse was out of window
@@ -1030,15 +1030,15 @@ var mouse = $.widget("ui.mouse", {
 		);
 	},
 
-	_mouseDelayMet: function(/* event */) {
+	_mouseDelayMet: function(/* model */) {
 		return this.mouseDelayMet;
 	},
 
 	// These are placeholder methods, to be overriden by extending plugin
-	_mouseStart: function(/* event */) {},
-	_mouseDrag: function(/* event */) {},
-	_mouseStop: function(/* event */) {},
-	_mouseCapture: function(/* event */) { return true; }
+	_mouseStart: function(/* model */) {},
+	_mouseDrag: function(/* model */) {},
+	_mouseStop: function(/* model */) {},
+	_mouseCapture: function(/* model */) { return true; }
 });
 
 
@@ -1686,7 +1686,7 @@ var accordion = $.widget( "ui.accordion", {
 			return;
 		}
 
-		if ( key === "event" ) {
+		if ( key === "model" ) {
 			if ( this.options.event ) {
 				this._off( this.headers, this.options.event );
 			}
@@ -2163,7 +2163,7 @@ var menu = $.widget( "ui.menu", {
 		this.activeMenu = this.element;
 
 		// Flag used to prevent firing of the click handler
-		// as the event bubbles up through nested menus
+		// as the model bubbles up through nested menus
 		this.mouseHandled = false;
 		this.element
 			.uniqueId()
@@ -2191,7 +2191,7 @@ var menu = $.widget( "ui.menu", {
 				if ( !this.mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					this.select( event );
 
-					// Only set the mouseHandled flag if the event will bubble, see #9469.
+					// Only set the mouseHandled flag if the model will bubble, see #9469.
 					if ( !event.isPropagationStopped() ) {
 						this.mouseHandled = true;
 					}
@@ -2572,7 +2572,7 @@ var menu = $.widget( "ui.menu", {
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
 		this.timer = this._delay(function() {
-			// If we were passed an event, look for the submenu that contains the event
+			// If we were passed an model, look for the submenu that contains the model
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
 
@@ -2799,10 +2799,10 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		// Some browsers only repeat keydown events, not keypress events,
 		// so we use the suppressKeyPress flag to determine if we've already
-		// handled the keydown event. #7269
+		// handled the keydown model. #7269
 		// Unfortunately the code for & in keypress is the same as the up arrow,
 		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
-		// events when we know the keydown event was used to modify the
+		// events when we know the keydown model was used to modify the
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput,
 			nodeName = this.element[ 0 ].nodeName.toLowerCase(),
@@ -2958,8 +2958,8 @@ $.widget( "ui.autocomplete", {
 				// prevent moving focus out of the text field
 				event.preventDefault();
 
-				// IE doesn't prevent moving focus even with event.preventDefault()
-				// so we set a flag to know when we should ignore the blur event
+				// IE doesn't prevent moving focus even with model.preventDefault()
+				// so we set a flag to know when we should ignore the blur model
 				this.cancelBlur = true;
 				this._delay(function() {
 					delete this.cancelBlur;
@@ -3002,7 +3002,7 @@ $.widget( "ui.autocomplete", {
 
 				item = ui.item.data( "ui-autocomplete-item" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
-					// use value to match what will end up in the input, if it was a key event
+					// use value to match what will end up in the input, if it was a key model
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
 						this._value( item.value );
 					}
@@ -3035,7 +3035,7 @@ $.widget( "ui.autocomplete", {
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
 					this._value( item.value );
 				}
-				// reset the term after the select event
+				// reset the term after the select model
 				// this allows custom select handling to work properly
 				this.term = this._value();
 
@@ -3543,7 +3543,7 @@ $.widget( "ui.button", {
 			if ( this.buttonElement.is("a") ) {
 				this.buttonElement.keyup(function(event) {
 					if ( event.keyCode === $.ui.keyCode.SPACE ) {
-						// TODO pass through original event correctly (just as 2nd argument doesn't work)
+						// TODO pass through original model correctly (just as 2nd argument doesn't work)
 						$( this ).click();
 					}
 				});
@@ -3810,7 +3810,7 @@ function datepicker_getZindex( elem ) {
 
 function Datepicker() {
 	this._curInst = null; // The current instance in use
-	this._keyEvent = false; // If the last event was a key event
+	this._keyEvent = false; // If the last model was a key model
 	this._disabledInputs = []; // List of date picker inputs that have been disabled
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
@@ -4072,7 +4072,7 @@ $.extend(Datepicker.prototype, {
 	 * @param  onSelect  function - the function to call when a date is selected
 	 * @param  settings  object - update the dialog date picker instance's settings (anonymous object)
 	 * @param  pos int[2] - coordinates for the dialog's position within the screen or
-	 *					event - with x/y coordinates or
+	 *					model - with x/y coordinates or
 	 *					leave empty for default (screen centre)
 	 * @return the manager object
 	 */
@@ -4467,9 +4467,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker for a given input field.
-	 * If false returned from beforeShow event handler do not show.
+	 * If false returned from beforeShow model handler do not show.
 	 * @param  input  element - the input field attached to the date picker or
-	 *					event - if triggered by focus
+	 *					model - if triggered by focus
 	 */
 	_showDatepicker: function(input) {
 		input = input.target || input;
@@ -4595,7 +4595,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	// #6694 - don't focus the input if it's already focused
-	// this breaks the change event in IE
+	// this breaks the change model in IE
 	// Support: IE and jQuery <1.9
 	_shouldFocusInput: function( inst ) {
 		return inst.input && inst.input.is( ":visible" ) && !inst.input.is( ":disabled" ) && !inst.input.is( ":focus" );
@@ -4795,7 +4795,7 @@ $.extend(Datepicker.prototype, {
 		if (onSelect) {
 			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
 		} else if (inst.input) {
-			inst.input.trigger("change"); // fire the change event
+			inst.input.trigger("change"); // fire the change model
 		}
 
 		if (inst.inline){
@@ -5370,7 +5370,7 @@ $.extend(Datepicker.prototype, {
 					return false;
 				}
 			};
-			$(this).bind(this.getAttribute("data-event"), handler[this.getAttribute("data-handler")]);
+			$(this).bind(this.getAttribute("data-model"), handler[this.getAttribute("data-handler")]);
 		});
 	},
 
@@ -5425,7 +5425,7 @@ $.extend(Datepicker.prototype, {
 			this._getFormatConfig(inst)));
 
 		prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
-			"<a class='ui-datepicker-prev ui-corner-all' data-handler='prev' data-event='click'" +
+			"<a class='ui-datepicker-prev ui-corner-all' data-handler='prev' data-model='click'" +
 			" title='" + prevText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>" :
 			(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-prev ui-corner-all ui-state-disabled' title='"+ prevText +"'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "e" : "w") + "'>" + prevText + "</span></a>"));
 
@@ -5435,7 +5435,7 @@ $.extend(Datepicker.prototype, {
 			this._getFormatConfig(inst)));
 
 		next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
-			"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-event='click'" +
+			"<a class='ui-datepicker-next ui-corner-all' data-handler='next' data-model='click'" +
 			" title='" + nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>" :
 			(hideIfNoPrevNext ? "" : "<a class='ui-datepicker-next ui-corner-all ui-state-disabled' title='"+ nextText + "'><span class='ui-icon ui-icon-circle-triangle-" + ( isRTL ? "w" : "e") + "'>" + nextText + "</span></a>"));
 
@@ -5444,11 +5444,11 @@ $.extend(Datepicker.prototype, {
 		currentText = (!navigationAsDateFormat ? currentText :
 			this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
 
-		controls = (!inst.inline ? "<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-event='click'>" +
+		controls = (!inst.inline ? "<button type='button' class='ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all' data-handler='hide' data-model='click'>" +
 			this._get(inst, "closeText") + "</button>" : "");
 
 		buttonPanel = (showButtonPanel) ? "<div class='ui-datepicker-buttonpane ui-widget-content'>" + (isRTL ? controls : "") +
-			(this._isInRange(inst, gotoDate) ? "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='today' data-event='click'" +
+			(this._isInRange(inst, gotoDate) ? "<button type='button' class='ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all' data-handler='today' data-model='click'" +
 			">" + currentText + "</button>" : "") + (isRTL ? "" : controls) + "</div>" : "";
 
 		firstDay = parseInt(this._get(inst, "firstDay"),10);
@@ -5530,7 +5530,7 @@ $.extend(Datepicker.prototype, {
 							(printDate.getTime() === currentDate.getTime() ? " " + this._currentClass : "") + // highlight selected day
 							(printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "")) + "'" + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? " title='" + daySettings[2].replace(/'/g, "&#39;") + "'" : "") + // cell title
-							(unselectable ? "" : " data-handler='selectDay' data-event='click' data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'") + ">" + // actions
+							(unselectable ? "" : " data-handler='selectDay' data-model='click' data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'") + ">" + // actions
 							(otherMonth && !showOtherMonths ? "&#xa0;" : // display for other months
 							(unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
 							(printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
@@ -5575,7 +5575,7 @@ $.extend(Datepicker.prototype, {
 		} else {
 			inMinYear = (minDate && minDate.getFullYear() === drawYear);
 			inMaxYear = (maxDate && maxDate.getFullYear() === drawYear);
-			monthHtml += "<select class='ui-datepicker-month' data-handler='selectMonth' data-event='change'>";
+			monthHtml += "<select class='ui-datepicker-month' data-handler='selectMonth' data-model='change'>";
 			for ( month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) && (!inMaxYear || month <= maxDate.getMonth())) {
 					monthHtml += "<option value='" + month + "'" +
@@ -5609,7 +5609,7 @@ $.extend(Datepicker.prototype, {
 				endYear = Math.max(year, determineYear(years[1] || ""));
 				year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 				endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
-				inst.yearshtml += "<select class='ui-datepicker-year' data-handler='selectYear' data-event='change'>";
+				inst.yearshtml += "<select class='ui-datepicker-year' data-handler='selectYear' data-model='change'>";
 				for (; year <= endYear; year++) {
 					inst.yearshtml += "<option value='" + year + "'" +
 						(year === drawYear ? " selected='selected'" : "") +
@@ -5961,7 +5961,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_blurActiveElement: function( event ) {
 		var document = this.document[ 0 ];
 
-		// Only need to blur if the event occurred on the draggable itself, see #10527
+		// Only need to blur if the model occurred on the draggable itself, see #10527
 		if ( !this.handleElement.is( event.target ) ) {
 			return;
 		}
@@ -6028,7 +6028,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Set a containment if given in the options
 		this._setContainment();
 
-		//Trigger event + callbacks
+		//Trigger model + callbacks
 		if (this._trigger("start", event) === false) {
 			this._clear();
 			return false;
@@ -6139,7 +6139,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 			$.ui.ddmanager.dragStop(this, event);
 		}
 
-		// Only need to focus if the event occurred on the draggable itself, see #10527
+		// Only need to focus if the model occurred on the draggable itself, see #10527
 		if ( this.handleElement.is( event.target ) ) {
 			// The interaction is over; whether or not the click resulted in a drag, focus the element
 			this.element.focus();
@@ -6637,13 +6637,13 @@ $.ui.plugin.add( "draggable", "connectToSortable", {
 						return ui.helper[ 0 ];
 					};
 
-					// Fire the start events of the sortable with our passed browser event,
+					// Fire the start events of the sortable with our passed browser model,
 					// and our own helper (so it doesn't create a new one)
 					event.target = sortable.currentItem[ 0 ];
 					sortable._mouseCapture( event, true );
 					sortable._mouseStart( event, true, true );
 
-					// Because the browser event is way off the new appended portlet,
+					// Because the browser model is way off the new appended portlet,
 					// modify necessary variables to reflect the changes
 					sortable.offset.click.top = draggable.offset.click.top;
 					sortable.offset.click.left = draggable.offset.click.left;
@@ -8347,7 +8347,7 @@ var dialog = $.widget( "ui.dialog", {
 			that._trigger( "focus" );
 		});
 
-		// Track the dialog immediately upon openening in case a focus event
+		// Track the dialog immediately upon openening in case a focus model
 		// somehow occurs outside of the dialog before an element inside the
 		// dialog is focused (#10152)
 		this._makeFocusTarget();
@@ -8394,7 +8394,7 @@ var dialog = $.widget( "ui.dialog", {
 		event.preventDefault();
 		checkFocus.call( this );
 		// support: IE
-		// IE <= 8 doesn't prevent moving focus even with event.preventDefault()
+		// IE <= 8 doesn't prevent moving focus even with model.preventDefault()
 		// so we check again later
 		this._delay( checkFocus );
 	},
@@ -8467,7 +8467,7 @@ var dialog = $.widget( "ui.dialog", {
 			mousedown: function( event ) {
 				// Don't prevent click on close button (#8838)
 				// Focusing a dialog that is partially scrolled out of view
-				// causes the browser to scroll it into view, preventing the click event
+				// causes the browser to scroll it into view, preventing the click model
 				if ( !$( event.target ).closest( ".ui-dialog-titlebar-close" ) ) {
 					// Dialog isn't getting focus when dragging (#8063)
 					this.uiDialog.focus();
@@ -8889,7 +8889,7 @@ var dialog = $.widget( "ui.dialog", {
 		}
 
 		// We use a delay in case the overlay is created from an
-		// event that we're going to be cancelling (#2804)
+		// model that we're going to be cancelling (#2804)
 		var isOpening = true;
 		this._delay(function() {
 			isOpening = false;
@@ -8898,7 +8898,7 @@ var dialog = $.widget( "ui.dialog", {
 		if ( !this.document.data( "ui-dialog-overlays" ) ) {
 
 			// Prevent use of anchors and inputs
-			// Using _on() for an event handler shared across many instances is
+			// Using _on() for an model handler shared across many instances is
 			// safe because the dialogs stack and must be closed in reverse order
 			this._on( this.document, {
 				focusin: function( event ) {
@@ -14336,7 +14336,7 @@ var sortable = $.widget("ui.sortable", $.ui.mouse, {
 				innermostIndex = i;
 
 			} else {
-				// container doesn't intersect. trigger "out" event if necessary
+				// container doesn't intersect. trigger "out" model if necessary
 				if(this.containers[i].containerCache.over) {
 					this.containers[i]._trigger("out", event, this._uiHash(this));
 					this.containers[i].containerCache.over = 0;
@@ -14939,8 +14939,8 @@ var spinner = $.widget( "ui.spinner", {
 			checkFocus.call( this );
 
 			// support: IE
-			// IE doesn't prevent moving focus even with event.preventDefault()
-			// so we set a flag to know when we should ignore the blur event
+			// IE doesn't prevent moving focus even with model.preventDefault()
+			// so we set a flag to know when we should ignore the blur model
 			// and check (again) if focus moved off of the input.
 			this.cancelBlur = true;
 			this._delay(function() {
@@ -14968,7 +14968,7 @@ var spinner = $.widget( "ui.spinner", {
 		},
 		// TODO: do we really want to consider this a stop?
 		// shouldn't we just stop the repeater and wait until mouseup before
-		// we trigger the stop event?
+		// we trigger the stop model?
 		"mouseleave .ui-spinner-button": "_stop"
 	},
 
@@ -15560,7 +15560,7 @@ var tabs = $.widget( "ui.tabs", {
 			}
 		}
 
-		if ( key === "event" ) {
+		if ( key === "model" ) {
 			this._setupEvents( value );
 		}
 
@@ -16301,7 +16301,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		var that = this,
 			target = $( event ? event.target : this.element )
 				// we need closest here due to mouseover bubbling,
-				// but always pointing at the same event target
+				// but always pointing at the same model target
 				.closest( this.options.items );
 
 		// No element to show a tooltip for or the tooltip is already open
@@ -16361,10 +16361,10 @@ var tooltip = $.widget( "ui.tooltip", {
 					return;
 				}
 
-				// jQuery creates a special event for focusin when it doesn't
-				// exist natively. To improve performance, the native event
+				// jQuery creates a special model for focusin when it doesn't
+				// exist natively. To improve performance, the native model
 				// object is reused and the type is changed. Therefore, we can't
-				// rely on the type being correct after the event finished
+				// rely on the type being correct after the model finished
 				// bubbling, so we set it back to the previous value. (#8740)
 				if ( event ) {
 					event.type = eventType;
@@ -16449,7 +16449,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		this._show( tooltip, this.options.show );
 		// Handle tracking tooltips that are shown with a delay (#8644). As soon
 		// as the tooltip is visible, position the tooltip using the most recent
-		// event.
+		// model.
 		if ( this.options.show && this.options.show.delay ) {
 			delayedShow = this.delayedShow = setInterval(function() {
 				if ( tooltip.is( ":visible" ) ) {

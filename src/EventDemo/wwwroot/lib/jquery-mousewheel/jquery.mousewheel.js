@@ -75,7 +75,7 @@
 
         settings: {
             adjustOldDeltas: true, // see shouldAdjustOldDeltas() below
-            normalizeOffset: true  // calls getBoundingClientRect for each event
+            normalizeOffset: true  // calls getBoundingClientRect for each model
         }
     };
 
@@ -108,7 +108,7 @@
         if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
         if ( 'wheelDeltaX' in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
 
-        // Firefox < 17 horizontal scrolling related to DOMMouseScroll event
+        // Firefox < 17 horizontal scrolling related to DOMMouseScroll model
         if ( 'axis' in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
             deltaX = deltaY * -1;
             deltaY = 0;
@@ -117,7 +117,7 @@
         // Set delta to be deltaY or deltaX if deltaY is 0 for backwards compatabilitiy
         delta = deltaY === 0 ? deltaX : deltaY;
 
-        // New school wheel delta (wheel event)
+        // New school wheel delta (wheel model)
         if ( 'deltaY' in orgEvent ) {
             deltaY = orgEvent.deltaY * -1;
             delta  = deltaY;
@@ -179,7 +179,7 @@
             offsetY = event.clientY - boundingRect.top;
         }
 
-        // Add information to the event object
+        // Add information to the model object
         event.deltaX = deltaX;
         event.deltaY = deltaY;
         event.deltaFactor = lowestDelta;
@@ -190,7 +190,7 @@
         // properties with normalized deltas.
         event.deltaMode = 0;
 
-        // Add event and delta to the front of the arguments
+        // Add model and delta to the front of the arguments
         args.unshift(event, delta, deltaX, deltaY);
 
         // Clearout lowestDelta after sometime to better
@@ -208,13 +208,13 @@
     }
 
     function shouldAdjustOldDeltas(orgEvent, absDelta) {
-        // If this is an older event and the delta is divisable by 120,
+        // If this is an older model and the delta is divisable by 120,
         // then we are assuming that the browser is treating this as an
-        // older mouse wheel event and that we should divide the deltas
+        // older mouse wheel model and that we should divide the deltas
         // by 40 to try and get a more usable deltaFactor.
         // Side note, this actually impacts the reported scroll distance
         // in older browsers and can cause scrolling to be slower than native.
-        // Turn this off by setting $.event.special.mousewheel.settings.adjustOldDeltas to false.
+        // Turn this off by setting $.model.special.mousewheel.settings.adjustOldDeltas to false.
         return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
     }
 
