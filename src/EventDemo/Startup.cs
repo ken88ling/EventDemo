@@ -52,6 +52,8 @@ namespace EventDemo
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<IEventService, EventService>();
+
             services.AddMvc();
 
             // Add application services.
@@ -79,9 +81,7 @@ namespace EventDemo
             }
 
             app.UseApplicationInsightsExceptionTelemetry();
-
             app.UseStaticFiles();
-
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715

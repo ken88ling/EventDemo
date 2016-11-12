@@ -10,6 +10,8 @@ namespace EventDemo.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
+
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime StartDate { get; set; }
@@ -17,6 +19,7 @@ namespace EventDemo.Models
         [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
 
+        public bool IsFullDay { get; set; }
 
         public int TimetableId { get; set; }
         public Timetable Timetable { get; set; }

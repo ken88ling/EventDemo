@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using EventDemo.Data;
 using EventDemo.Models;
 using EventDemo.Models.EventViewModels;
+using EventDemo.Services;
 
 namespace EventDemo.Controllers
 {
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEventService _service;
 
-        public EventsController(ApplicationDbContext context)
+        public EventsController(ApplicationDbContext context,IEventService service)
         {
-            _context = context;    
+            _context = context;
+            _service = service;
         }
 
         // GET: Events
@@ -109,6 +112,7 @@ namespace EventDemo.Controllers
         // POST: Events/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // to solve this issue, so I was binding to viewModel
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EventGeneralViewModel model)
@@ -159,13 +163,22 @@ namespace EventDemo.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            var item = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(@event);
+            var model = new EventGeneralViewModel()
+            {
+                Id = item.Id,
+                Title = item.Title,
+                TimetableId = item.TimetableId,
+                StartDate = item.StartDate,
+                EndTime = item.EndTime
+            };
+
+            return View(model);
         }
 
         // POST: Events/Delete/5
@@ -173,9 +186,12 @@ namespace EventDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @event = await _context.Events.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Events.Remove(@event);
-            await _context.SaveChangesAsync();
+            var model = new EventGeneralViewModel()
+            {
+                Id = id
+            };
+
+            await _service.DeleteEvent(model);
             return RedirectToAction("Index");
         }
 
