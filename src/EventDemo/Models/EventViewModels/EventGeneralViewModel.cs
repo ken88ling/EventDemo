@@ -22,5 +22,7 @@ namespace EventDemo.Models.EventViewModels
         public Timetable Timetable { get; set; }
 
         public SelectList TimetablesList { get; set; }
+        public string Description { get; internal set; }
+        public bool IsFullDay { get; set; }
     }
 }

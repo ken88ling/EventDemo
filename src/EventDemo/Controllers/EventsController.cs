@@ -72,6 +72,8 @@ namespace EventDemo.Controllers
                     TimetableId = model.TimetableId,
                     StartDate = model.StartDate,
                     EndTime = model.EndTime,
+                    Description = model.Description,
+                    IsFullDay = model.IsFullDay
                 };
                 _context.Events.Add(item);
                 await _context.SaveChangesAsync();
