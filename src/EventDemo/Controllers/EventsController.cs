@@ -67,14 +67,15 @@ namespace EventDemo.Controllers
             {
                 var item =  new Event()
                 {
-                    Id=model.Id,
+                    //Id=model.Id,
                     Title = model.Title,
-                    TimetableId = model.TimetableId,
+                    Description = model.Description,
                     StartDate = model.StartDate,
                     EndTime = model.EndTime,
-                    Description = model.Description,
-                    IsFullDay = model.IsFullDay
+                    IsFullDay = model.IsFullDay,
+                    TimetableId = model.TimetableId
                 };
+
                 _context.Events.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -91,8 +92,8 @@ namespace EventDemo.Controllers
                 return NotFound();
             }
 
-            var getEvent =await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
-            if (getEvent == null)
+            var item =await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null)
             {
                 return NotFound();
             }
@@ -100,13 +101,15 @@ namespace EventDemo.Controllers
 
             var model = new EventGeneralViewModel()
             {
-                Id = getEvent.Id,
-                Title = getEvent.Title,
-                StartDate = getEvent.StartDate,
-                EndTime = getEvent.EndTime,
-                TimetableId = getEvent.TimetableId
+                Id = item.Id,
+                Title = item.Title,
+                StartDate = item.StartDate,
+                EndTime = item.EndTime,
+                TimetableId = item.TimetableId,
+                Description = item.Description,
+                IsFullDay = item.IsFullDay
             };
-            model.TimetablesList = new SelectList(_context.Timetables, "TimetableId", "Description",getEvent.TimetableId);
+            model.TimetablesList = new SelectList(_context.Timetables, "TimetableId", "Description",item.TimetableId);
 
             return View(model);
         }
@@ -134,7 +137,9 @@ namespace EventDemo.Controllers
                         Title = model.Title,
                         StartDate = model.StartDate,
                         EndTime = model.EndTime,
-                        TimetableId = model.TimetableId
+                        TimetableId = model.TimetableId,
+                        Description = model.Description,
+                        IsFullDay = model.IsFullDay
                     };
                     _context.Update(item);
                     await _context.SaveChangesAsync();
@@ -177,7 +182,9 @@ namespace EventDemo.Controllers
                 Title = item.Title,
                 TimetableId = item.TimetableId,
                 StartDate = item.StartDate,
-                EndTime = item.EndTime
+                EndTime = item.EndTime,
+                Description = item.Description,
+                IsFullDay = item.IsFullDay
             };
 
             return View(model);

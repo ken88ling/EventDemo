@@ -17,12 +17,11 @@ namespace EventDemo.Models.EventViewModels
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
-
+        public string Description { get; set; }
+        public bool IsFullDay { get; set; }
         public int TimetableId { get; set; }
         public Timetable Timetable { get; set; }
 
         public SelectList TimetablesList { get; set; }
-        public string Description { get; internal set; }
-        public bool IsFullDay { get; set; }
     }
 }
